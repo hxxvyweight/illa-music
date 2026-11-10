@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+interface Artist {
+  ID: number;
+  Name: string;
+}
+
+const res = await fetch("http://localhost:8080/artists");
+const artists: Artist[] = await res.json();
+---
+
+<Layout title="Artists | Illa-Music">
+  <main class="container">
+    <h1>Artists</h1>
+    <ul>
+      {artists.map((artist) => (
+        <li>
+          <a href={`/artists/${artist.ID}`}>{artist.Name}</a>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>

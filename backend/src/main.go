@@ -14,6 +14,10 @@ type Artist struct {
 	ID   int
 	Name string
 }
+type Genre struct {
+	ID   int
+	Name string
+}
 
 var db *sql.DB
 
@@ -58,6 +62,83 @@ func handleArtists(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(artists)
 
 }
+func handleGenres(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	rows, err := db.Query("SELECT id, name FROM genres")
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var genres []Genre
+
+	for rows.Next() {
+
+		var genre Genre
+
+		err := rows.Scan(&genre.ID, &genre.Name)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		genres = append(genres, genre)
+
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Printf("ERROR: Failed to fetch artist: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(genres)
+
+}
+
+func handleVenues(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	rows, err := db.Query("SELECT id, name FROM genres")
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var genres []Genre
+
+	for rows.Next() {
+
+		var genre Genre
+
+		err := rows.Scan(&genre.ID, &genre.Name)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		genres = append(genres, genre)
+
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Printf("ERROR: Failed to fetch artist: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(genres)
+
+}
 
 func main() {
 	var err error
@@ -75,6 +156,7 @@ func main() {
 	fmt.Println("Database OK")
 
 	http.HandleFunc("/artists", handleArtists)
+	http.HandleFunc("/genres", handleGenres)
 
 	http.ListenAndServe(":8080", nil)
 

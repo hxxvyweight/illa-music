@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Genre {
+  ID: number;
+  Name: string;
+}
+
+const res = await fetch("http://localhost:8080/genres");
+const genres: Genre[] = await res.json();
+---
+
+<Layout title="Genres | Illa-Music">
+  <main class="container">
+    <h1>Genres</h1>
+    <ul>
+      {genres.map((genre) => (
+        <li>{genre.Name}</li>
+      ))}
+    </ul>
+  </main>
+</Layout>
