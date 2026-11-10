@@ -1,11 +1,22 @@
 ---
 const { heading } = Astro.props;
+import ButtonMain from '../components/ButtonMain.astro';
 ---
 
 <div class="hero">
 
 	<h1>{heading}</h1>
-	<h2>Welcome to Illa-Music, a home for all local music in and around the Illawarra</h2>
+	<h2>Welcome to Illa-Music, a collection of all local music.<br/>In and around the Illawarra</h2>
+
+	<div class="btn-container">
+		<ButtonMain text="artists" ref="/artists" class="button-main"/>
+		<ButtonMain text="genres" ref="/genres" class="button-main"/>
+		<ButtonMain text="venues" ref="/venues" class="button-main"/>
+		<ButtonMain text="suggestions" ref="/suggestions" class="button-main"/>
+		<ButtonMain text="artist history" ref="/genre-history" class="button-main"/>
+		<ButtonMain text="genre history" ref="/artist-history" class="button-main"/>
+		<ButtonMain text="venue history" ref="/venue-history" class="button-main"/>
+	</div>
 
 </div>
 	
