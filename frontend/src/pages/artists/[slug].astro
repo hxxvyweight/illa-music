@@ -1,0 +1,40 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+
+// 1. Generate static paths for all MDX files at build time (SSG)
+export async function getStaticPaths() {
+  const artists = await getCollection('artists');
+  return artists.map((artist) => ({
+    params: { slug: artist.slug },
+    props: { artist },
+  }));
+}
+
+const { artist } = Astro.props;
+
+// 2. Render the MDX content directly
+const { Content } = await artist.render();
+
+// 3. (Optional) Fetch extended relational data from your Go API using the slug
+const response = await fetch(`http://localhost:8080/api/artists?slug=${artist.slug}`);
+const dbData = response.ok ? await response.json() : null;
+---
+
+<html lang="en">
+  <head>
+    <title>{artist.data.name} | Illa Music</title>
+  </head>
+  <body>
+    <main>
+      <h1>{artist.data.name}</h1>
+      <p><strong>Genre:</strong> {artist.data.genre}</p>
+      
+      {dbData && <p class="db-bio"><strong>DB Info:</strong> {dbData.bio}</p>}
+
+      <!-- Render full MDX body here -->
+      <article>
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>

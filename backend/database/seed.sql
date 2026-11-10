@@ -13,9 +13,14 @@ INSERT INTO genres (id, name) VALUES
 
 -- 3. Insert Venues
 INSERT INTO venues (id, name, location) VALUES 
-(1, 'Printworks', 'London, UK'),
-(2, 'Berghain', 'Berlin, Germany'),
-(3, 'Fabric', 'London, UK');
+(1, 'La La La’s', '3 Globe Lane, Wollongong CBD'),
+(2, 'UniBar (UOW)', 'University of Wollongong'),
+(3, 'Society City', 'Upstairs, 274 Crown Street, Wollongong CBD'),
+(4, 'Anita’s Theatre', '264-270 Lawrence Hargrave Dr, Thirroul'),
+(5, 'Centro CBD', 'Wollongong CBD'),
+(6, 'The Servo', '68 Wentworth St, Port Kembla'),
+(7, 'The Grand Hotel', '327 Crown St, Wollongong'),
+(8, 'Heyday', '289 Crown St, Wollongong CBD');
 
 -- 4. Map Artists to Genres (Many-to-Many)
 INSERT INTO artists_genres (artist_id, genre_id) VALUES 

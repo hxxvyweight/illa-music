@@ -1,0 +1,47 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+interface Venue {
+ID: number;
+Name: string;
+Location: string;
+}
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:8080/venues")
+  const venues: Venue[] = await res.json()
+
+  return venues.map((venue) => ({
+  	params: { id: venue.ID.toString() },
+	props: { venue },
+	}));
+}
+
+const { venue } = Astro.props as { venue: Venue };
+
+const allVenues = await getCollection('venues');
+const entry = allVenues.find((e) => e.id === venue.ID.toString() || e.id === `${venue.ID}.mdx`);
+
+const { Content } = entry ? await render(entry) : { Content: null };
+---
+
+
+<Layout title={`${venue.Name} | Illa-Music`}>
+  <main class="container">
+    <a href="/venues" class="back-link">&larr; Back to Venues</a>
+
+    <header class="artist-header">
+      <span class="db-badge">ID #{venue.ID}</span>
+      <h1>{venue.Name}</h1>
+    </header>
+
+    <article class="prose">
+      {Content ? (
+        <Content />
+      ) : (
+        <p class="no-entry"><em>No editorial archive written for this venue yet. (Checked ID: {venue.ID})</em></p>
+      )}
+    </article>
+  </main>
+</Layout>

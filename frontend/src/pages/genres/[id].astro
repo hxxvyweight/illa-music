@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+interface Genre{
+  ID: number;
+  Name: string;
+  Location: string;
+}
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:8080/genres");
+  const genres: Genre[] = await res.json();
+
+  return genres.map((genre) => ({
+    params: { id: genre.ID.toString() },
+    props: { genre },
+  }));
+}
+
+const { genre } = Astro.props as { genre: Genre };
+
+const allGenres = await getCollection('genres');
+const entry = allGenres.find((e) => e.id === genre.ID.toString() || e.id === `${genre.ID}.mdx`);
+
+const { Content } = entry ? await render(entry) : { Content: null };
+---
+<Layout title={`${genre.Name} | Illa-Music`}>
+  <main class="container">
+    <a href="/genres" class="back-link">&larr; Back to Genres</a>
+
+    <header class="artist-header">
+      <span class="db-badge">ID #{genre.ID}</span>
+      <h1>{genre.Name}</h1>
+    </header>
+
+    <article class="prose">
+      {Content ? (
+        <Content />
+      ) : (
+        <p class="no-entry"><em>No editorial archive written for this genre yet. (Checked ID: {genre.ID})</em></p>
+      )}
+    </article>
+  </main>
+</Layout>
