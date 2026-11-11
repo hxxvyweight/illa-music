@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const venues = await getCollection('venues');
+
+  return venues.map((venue) => ({
+    params: { slug: venue.data.slug || venue.id },
+    props: { venue },
+  }));
+}
+
+const { venue } = Astro.props;
+
+// Correct way to render content using the Content Layer loader
+const { Content } = await render(venue);
+
+const resolvedSlug = venue.data.slug || venue.id;
+const response = await fetch(`http://localhost:8080/api/venues?slug=${resolvedSlug}`);
+const dbData = response.ok ? await response.json() : null;
+---
+
+<Layout title={`${venue.data.name} | Illa-Music`}>
+  <main class="container">
+    <h1>{venue.data.name}</h1>
+    
+    {venue.data.location && <p><strong>Location:</strong> {venue.data.location}</p>}
+    {venue.data.tier && <p class="tier-badge"><strong>Tier:</strong> {venue.data.tier}</p>}
+
+    {dbData && <p class="db-info"><strong>DB Info:</strong> {dbData.location}</p>}
+
+    <article class="content">
+      <Content />
+    </article>
+  </main>
+</Layout>

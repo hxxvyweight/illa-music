@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 interface Artist {
   ID: number;
   Name: string;
+  Slug: string;
 }
 
 const res = await fetch("http://localhost:8080/artists");
@@ -16,7 +17,7 @@ const artists: Artist[] = await res.json();
     <ul>
       {artists.map((artist) => (
         <li>
-          <a href={`/artists/${artist.ID}`}>{artist.Name}</a>
+          <a href={`/artists/${artist.Slug}`}>{artist.Name}</a>
         </li>
       ))}
     </ul>

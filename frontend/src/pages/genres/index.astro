@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 interface Genre {
   ID: number;
   Name: string;
+  Slug: string;
 }
 
 const res = await fetch("http://localhost:8080/genres");
@@ -17,7 +18,7 @@ const genres: Genre[] = await res.json();
 	    {genres.map((genre) => (
 
 	    <li>
-		    <a href={`/genres/${genre.ID}`}>{genre.Name}</a>
+		    <a href={`/genres/${genre.Slug}`}>{genre.Name}</a>
 	    </li>
       ))}
     </ul>

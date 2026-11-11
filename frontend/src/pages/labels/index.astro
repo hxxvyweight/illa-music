@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+interface Label {
+  ID: int;
+  Name: string;
+  Location: string;
+  Slug: string;
+}
+
+const res = await fetch("http://localhost:8080/labels");
+const labels: Label[] = await res.json();
+---
+
+<Layout title="Labels | Illa-Music">
+  <main class="container">
+    <h1>Artists</h1>
+    <ul>
+      {labels.map((label) => (
+        <li>
+		<a href={`/labels/${label.Slug}`}>{label.Name}</a>
+		<p>Location: ${label.Location}</p>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Layout>

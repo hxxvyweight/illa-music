@@ -3,85 +3,76 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+
+	_ "modernc.org/sqlite"
 )
 
-// Struct definitions matching your updated schema with slugs
+var db *sql.DB
+
 type Artist struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Slug string `json:"slug"`
+	ID   int    `json:"ID"`
+	Name string `json:"Name"`
+	Slug string `json:"Slug"`
 }
 
 type Genre struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	Slug string `json:"slug"`
+	ID   int    `json:"ID"`
+	Name string `json:"Name"`
+	Slug string `json:"Slug"`
 }
 
 type Venue struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	Location string `json:"location"`
-	Slug     string `json:"slug"`
+	ID       int    `json:"ID"`
+	Name     string `json:"Name"`
+	Location string `json:"Location"`
+	Slug     string `json:"Slug"`
+}
+type Label struct {
+	ID       int    `json:"ID"`
+	Name     string `json:"Name"`
+	Location string `json:"Location"`
+	Slug     string `json:"Slug"`
 }
 
-// 1. Handle Artists (Supports fetching all OR a single artist by slug ?slug=...)
 func handleArtists(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Check if a specific slug was requested
 	slug := r.URL.Query().Get("slug")
 	if slug != "" {
 		var artist Artist
-		query := "SELECT id, name, slug FROM artists WHERE slug = ?"
-		err := db.QueryRow(query, slug).Scan(&artist.ID, &artist.Name, &artist.Slug)
-
+		err := db.QueryRow("SELECT id, name, slug FROM artists WHERE slug = ?", slug).Scan(&artist.ID, &artist.Name, &artist.Slug)
 		if err == sql.ErrNoRows {
 			http.Error(w, "Artist not found", http.StatusNotFound)
 			return
 		} else if err != nil {
-			log.Printf("ERROR: Failed to fetch artist by slug: %v", err)
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
-		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(artist)
 		return
 	}
 
-	// Otherwise, fetch all artists
 	rows, err := db.Query("SELECT id, name, slug FROM artists")
 	if err != nil {
-		log.Printf("ERROR: Failed to query artists: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer rows.Close()
 
-	var artists []Genre // or []Artist depending on your slice type
-	// Wait, let's make sure it's the right slice type:
-	var artistList []Artist
+	var artists []Artist
 	for rows.Next() {
 		var a Artist
-		if err := rows.Scan(&a.ID, &a.Name, &a.Slug); err != nil {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			return
-		}
-		artistList = append(artistList, a)
+		rows.Scan(&a.ID, &a.Name, &a.Slug)
+		artists = append(artists, a)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(artistList)
+	json.NewEncoder(w).Encode(artists)
 }
 
-// 2. Handle Genres (Includes slugs)
 func handleGenres(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -99,7 +90,6 @@ func handleGenres(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(genre)
 		return
 	}
@@ -113,26 +103,13 @@ func handleGenres(w http.ResponseWriter, r *http.Request) {
 
 	var genres []Genre
 	for rows.Next() {
-		var genre Genre
-		err := rows.Scan(&genre.ID, &genre.Name, &genre.Slug)
-		if err != nil {
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			return
-		}
-		genres = append(genres, genre)
+		var g Genre
+		rows.Scan(&g.ID, &g.Name, &g.Slug)
+		genres = append(genres, g)
 	}
-
-	if err = rows.Err(); err != nil {
-		log.Printf("ERROR: Failed to iterate genres: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(genres)
 }
 
-// 3. Handle Venues (Includes location and slugs)
 func handleVenues(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -150,7 +127,6 @@ func handleVenues(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(venue)
 		return
 	}
@@ -164,38 +140,65 @@ func handleVenues(w http.ResponseWriter, r *http.Request) {
 
 	var venues []Venue
 	for rows.Next() {
-		var venue Venue
-		err := rows.Scan(&venue.ID, &venue.Name, &venue.Location, &venue.Slug)
-		if err != nil {
+		var v Venue
+		rows.Scan(&v.ID, &v.Name, &v.Location, &v.Slug)
+		venues = append(venues, v)
+	}
+	json.NewEncoder(w).Encode(venues)
+}
+func handleLabels(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	slug := r.URL.Query().Get("slug")
+	if slug != "" {
+		var label Label
+		err := db.QueryRow("SELECT name, location, slug FROM labels WHERE slug = ?", slug).Scan(&label.Name, &label.Location, &label.Slug)
+		if err == sql.ErrNoRows {
+			http.Error(w, "Label not found", http.StatusNotFound)
+			return
+		} else if err != nil {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-		venues = append(venues, venue)
+		json.NewEncoder(w).Encode(label)
+		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(venues)
+	rows, err := db.Query("SELECT name, location, slug FROM labels")
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var labels []Label
+	for rows.Next() {
+		var l Label
+		rows.Scan(&l.Name, &l.Location, &l.Slug)
+		labels = append(labels, l)
+	}
+	json.NewEncoder(w).Encode(labels)
 }
 
 func main() {
-	var err error
+	driverName := "sqlite"
+	dbPath := "../database/illa.db"
 
+	var err error
 	db, err = sql.Open(driverName, dbPath)
 	if err != nil {
-		log.Fatalln("Unable to open database", err)
-	}
-
-	if err := db.Ping(); err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 	defer db.Close()
-
-	fmt.Println("Database OK")
 
 	http.HandleFunc("/artists", handleArtists)
 	http.HandleFunc("/genres", handleGenres)
 	http.HandleFunc("/venues", handleVenues)
+	http.HandleFunc("/labels", handleLabels)
 
+	log.Println("Server running on :8080")
 	http.ListenAndServe(":8080", nil)
-
 }

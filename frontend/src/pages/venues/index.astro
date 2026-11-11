@@ -2,29 +2,26 @@
 import Layout from '../../layouts/Layout.astro';
 
 interface Venue {
-ID: number;
-Name: string;
-Location: string;
-
+  ID: number;
+  Name: string;
+  Location: string;
+  Slug: string;
 }
 
-const res = await fetch("http://localhost:8080/venues")
+const res = await fetch("http://localhost:8080/venues");
 const venues: Venue[] = await res.json();
 ---
 
 <Layout title="Venues | Illa-Music">
-	<main class="container">
-		<h1>Venues</h1>
-		<ul>
-			{venues.map((venue) => (
-
-			<li>
-				<a href={`/venues/${venue.ID}`}>{venue.Name}</a>
-				<p>{venue.Location}</p>
-			</li>
-
-			))}
-		</ul>
-			
-	</main>
+  <main class="container">
+    <h1>Venues</h1>
+    <ul>
+      {venues.map((venue) => (
+        <li>
+          <a href={`/venues/${venue.Slug}`}>{venue.Name}</a>
+          <p>{venue.Location}</p>
+        </li>
+      ))}
+    </ul>
+  </main>
 </Layout>

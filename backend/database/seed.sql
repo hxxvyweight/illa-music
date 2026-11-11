@@ -1,38 +1,50 @@
--- 1. Insert Artists
-INSERT INTO artists (id, name) VALUES 
-(1, 'hxxvyweight'),
-(2, 'Bicep'),
-(3, 'Charlotte de Witte');
+INSERT INTO venues (name, location, slug) VALUES 
+('La La Las', '3 Globe Lane, Wollongong CBD', 'la-la-las'),
+('UniBar (UOW)', 'University of Wollongong', 'unibar-uow'),
+('The Servo', '68 Wentworth St, Port Kembla', 'the-servo'),
+('The Grand Hotel', '327 Crown St, Wollongong', 'the-grand-hotel'),
+('Heyday', '289 Crown St, Wollongong CBD', 'heyday'),
+('Society City', 'Upstairs, 274 Crown Street, Wollongong CBD', 'society-city'),
+('Anitas Theatre', '264-270 Lawrence Hargrave Dr, Thirroul', 'anitas-theatre');
 
--- 2. Insert Genres
-INSERT INTO genres (id, name) VALUES 
-(1, 'Techno'),
-(2, 'Hardgroove'),
-(3, 'UKG'),
-(4, 'House');
+INSERT INTO genres (name, slug) VALUES
+('Hardgroove', 'hardgroove'),
+('Techno', 'techno'),
+('Punk', 'punk'),
+('Indie Rock', 'indie-rock'),
+('Rock', 'rock'),
+('Funk', 'funk'),
+('Pop', 'pop'),
+('Metal', 'metal'),
+('Electronic', 'electronic'),
+('Hip Hop', 'hip-hop'),
+('Jazz', 'jazz'),
+('Blues', 'blues'),
+('Ambient', 'ambient'),
+('Folk', 'folk'),
+('Alternative', 'alternative');
 
--- 3. Insert Venues
-INSERT INTO venues (id, name, location) VALUES 
-(1, 'La La La’s', '3 Globe Lane, Wollongong CBD'),
-(2, 'UniBar (UOW)', 'University of Wollongong'),
-(3, 'Society City', 'Upstairs, 274 Crown Street, Wollongong CBD'),
-(4, 'Anita’s Theatre', '264-270 Lawrence Hargrave Dr, Thirroul'),
-(5, 'Centro CBD', 'Wollongong CBD'),
-(6, 'The Servo', '68 Wentworth St, Port Kembla'),
-(7, 'The Grand Hotel', '327 Crown St, Wollongong'),
-(8, 'Heyday', '289 Crown St, Wollongong CBD');
+INSERT INTO artists (name, slug) VALUES
+('Hockey Dad', 'hockey-dad'),
+('Tumbleweed', 'tumbleweed'),
+('Pacific Avenue', 'pacific-avenue'),
+('The Vanns', 'the-vanns'),
+('Chimers', 'chimers'),
+('Totally Unicorn', 'totally-unicorn'),
+('The Terrys', 'the-terrys'),
+('Shining Bird', 'shining-bird'),
+('Owen Guns', 'owen-guns'),
+('Robot God', 'robot-god'),
+('Dark Clouds', 'dark-clouds'),
+('Mini Skirt', 'mini-skirt'),
+('Good Lekker', 'good-lekker'),
+('Totty', 'totty'),
+('Tyne James Organ', 'tyne-james-organ'),
+('Nasenbluten', 'nasenbluten');
 
--- 4. Map Artists to Genres (Many-to-Many)
-INSERT INTO artists_genres (artist_id, genre_id) VALUES 
-(1, 1), -- hxxvyweight plays Techno
-(1, 2), -- hxxvyweight plays Hardgroove
-(2, 3), -- Bicep plays UKG
-(2, 4), -- Bicep plays House
-(3, 1); -- Charlotte de Witte plays Techno
-
--- 5. Map Artists to Venues (Many-to-Many)
-INSERT INTO artists_venues (artist_id, venue_id) VALUES 
-(1, 3), -- hxxvyweight played at Fabric
-(2, 1), -- Bicep played at Printworks
-(2, 3), -- Bicep played at Fabric
-(3, 2); -- Charlotte de Witte played at Berghain
+INSERT INTO labels (name, location, slug) VALUES
+('Farmer & The Owl', '228 Keira Street, Wollongong NSW 2500', 'farmer-and-the-owl'),
+('Unknown Records', 'Level 4, Suite 3/221-229 Crown Street, Wollongong NSW 2500', 'unknown-records'),
+('Third Eye Stimuli', 'Wollongong / Sydney', 'third-eye-stimuli'),
+('Cheatin'' Hearts Records', 'Thirroul NSW 2515', 'cheatin'),
+('High Beam Records', '228 Keira Street, Wollongong NSW 2500', 'high-beam-records');

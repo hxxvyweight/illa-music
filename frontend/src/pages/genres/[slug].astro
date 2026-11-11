@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const genres = await getCollection('genres');
+
+  return genres.map((genre) => ({
+    params: { slug: genre.data.slug || genre.id },
+    props: { genre },
+  }));
+}
+
+const { genre } = Astro.props;
+const { Content } = await render(genre);
+---
+
+<Layout title={`${genre.data.name} | Illa-Music`}>
+  <main class="container">
+    <h1>{genre.data.name}</h1>
+    
+    {genre.data.category && <p><strong>Category:</strong> {genre.data.category}</p>}
+    {genre.data.origin && <p><strong>Origin:</strong> {genre.data.origin}</p>}
+
+    <article class="content">
+      <Content />
+    </article>
+  </main>
+</Layout>

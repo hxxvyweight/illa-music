@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const res = await fetch("http://localhost:8080/labels");
+  const labels = await res.json();
+
+  return labels.map((label) => ({
+    params: { slug: label.Slug },
+    props: { label },
+  }));
+}
+
+const { label } = Astro.props;
+---
+
+<Layout title={`${label.Name} | Illa-Music`}>
+  <main class="container">
+	  <h1>{label.Name}</h1>
+	  <p>Location: {label.Location}</p>
+    <p>Slug: {label.Slug}</p>
+    <!-- Add any other fields your artist struct has -->
+  </main>
+</Layout>
