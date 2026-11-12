@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  --color-mint: #F7FFF7;
+  --color-main-black: #343434;
+  --color-main-red: #FC6136;
+  --color-pine: #508484;
+  --color-jungle: #0EAD69;
+  --color-wheat: #F5E0B7;
+  --color-main-white: #FBFFF1;
+  --color-main-pages: #343434;
+
+  --font-sans: 'Sora Variable', system-ui, sans-serif;
+  --font-nerko: 'Nerko One', cursive;
+}
+
+@utility pages {
+	@apply py-8 flex-col items-center text-center justify-center
+	
+}
+@utility nav-links {
+	@apply hover:underline
+}
+

@@ -12,11 +12,11 @@ const artists: Artist[] = await res.json();
 ---
 
 <Layout title="Artists | Illa-Music">
-  <main class="container">
-    <h1>Artists</h1>
-    <ul>
+  <main class="flex-col items-center text-center justify-center pages">
+    <h1 class="text-xl font-bold">Artists</h1>
+    <ul class="tracking-widest py-4">
       {artists.map((artist) => (
-        <li>
+        <li class="py-2 font-medium hover:underline decoration-1">
           <a href={`/artists/${artist.Slug}`}>{artist.Name}</a>
         </li>
       ))}

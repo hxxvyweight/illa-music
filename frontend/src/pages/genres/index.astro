@@ -11,15 +11,14 @@ const res = await fetch("http://localhost:8080/genres");
 const genres: Genre[] = await res.json();
 ---
 
-<Layout title="Genres | Illa-Music">
-  <main class="container">
-    <h1>Genres</h1>
-    <ul>
-	    {genres.map((genre) => (
-
-	    <li>
-		    <a href={`/genres/${genre.Slug}`}>{genre.Name}</a>
-	    </li>
+<Layout title="Artists | Illa-Music">
+  <main class="flex-col text-main-pages items-center text-center justify-center pages">
+    <h1 class="text-xl font-bold">Genres</h1>
+    <ul class="tracking-widest py-4">
+      {genres.map((genre) => (
+        <li class="py-2 hover:underline decoration-1">
+          <a href={`/genres/${genre.Slug}`}>{genre.Name}</a>
+        </li>
       ))}
     </ul>
   </main>

@@ -3,20 +3,24 @@ const { heading } = Astro.props;
 import ButtonMain from '../components/ButtonMain.astro';
 ---
 
-<div class="hero">
+<div class="flex-col text-center items-center justify-center text-lg min-h-[40vh] text-main-black bg-wheat">
 
-	<h1>{heading}</h1>
-	<h2>Welcome to the Illawarra Collection, a collection of all local music.<br/>In and around the Illawarra</h2>
+	<h1 class="text-2xl">{heading}</h1>
+	<h2 class="text-xl font-medium py-8">Welcome to the Illawarra Collection, for all local music.<br/>In and around the Illawarra</h2>
 
-	<div class="btn-container">
-		<ButtonMain text="artists" ref="/artists" class="button-main"/>
-		<ButtonMain text="genres" ref="/genres" class="button-main"/>
-		<ButtonMain text="labels" ref="/labels" class="button-main"/>
-		<ButtonMain text="venues" ref="/venues" class="button-main"/>
-		<ButtonMain text="artist history" ref="/genre-history" class="button-main"/>
-		<ButtonMain text="genre history" ref="/artist-history" class="button-main"/>
-		<ButtonMain text="label history" ref="/label-history" class="button-main"/>
-		<ButtonMain text="venue history" ref="/venue-history" class="button-main"/>
+	<div class="grid grid-cols-1 place-items-center justify-center mt-4">
+
+	<div class="grid grid-cols-1 md:grid-cols-4 place-items-center gap-8 max-w-4xl">
+		<ButtonMain text="Artists" ref="/artists" class="button-main"/>
+		<ButtonMain text="Genres" ref="/genres" class="button-main"/>
+		<ButtonMain text="Labels" ref="/labels" class="button-main"/>
+		<ButtonMain text="Venues" ref="/venues" class="button-main"/>
+		<ButtonMain text="Artist history" ref="/genre-history" class="button-main"/>
+		<ButtonMain text="Genre history" ref="/artist-history" class="button-main"/>
+		<ButtonMain text="Label history" ref="/label-history" class="button-main"/>
+		<ButtonMain text="Venue history" ref="/venue-history" class="button-main"/>
+	
+	</div>
 	</div>
 
 </div>

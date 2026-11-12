@@ -1,24 +1,27 @@
 ---
+import { Image } from 'astro:assets';
+import Turntable from '../assets/turntable.svg';
+import Casette from '../assets/casette.svg';
 ---
 
-<div id="header-main">
+<div id="">
 
 	
-	<div class="header">
+	<div class="">
 	
 		
-		<div class="logo">
-			<a href="/">Illawarra-Collection</a>
-		
+		<div class="bg-wheat text-main-black flex-col md:flex font-nerko font-bold text-3xl md:text-5xl justify-center min-h-[5vh] items-center text-center py-12">
+			<a class="md:absolute "href="/">Illawarra Collection</a>
+			<Image src={ Turntable } class="hidden md:flex max-h-20 md:max-h-30 w-auto p-4 relative md:translate-x-65" alt="Turntable"/>
 		</div>
 
 		
-		<div class="nav">
-			<a href="/">Home</a>
-			<a href="/artists">Artists</a>
-			<a href="/genres">Genres</a>
-			<a href="/labels">Labels</a>
-			<a href="/venues">Venues</a>
+		<div class="hidden md:flex items-center text-main-black font-semibold border-b-5 border-taupe-900/20 md:py-4 mb-4 justify-center gap-8 text-center">
+			<a class="nav-links" href="/">Home</a>
+			<a class="nav-links" href="/artists">Artists</a>
+			<a class="nav-links" href="/genres">Genres</a>
+			<a class="nav-links" href="/labels">Labels</a>
+			<a class="nav-links" href="/venues">Venues</a>
 		</div>
 	</div>
 

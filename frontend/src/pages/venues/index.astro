@@ -12,14 +12,14 @@ const res = await fetch("http://localhost:8080/venues");
 const venues: Venue[] = await res.json();
 ---
 
-<Layout title="Venues | Illa-Music">
-  <main class="container">
-    <h1>Venues</h1>
-    <ul>
+<Layout title="Venues | Illawarra Collection">
+  <main class="flex-col items-center text-center justify-center pages">
+    <h1 class="text-xl font-bold">Venues</h1>
+    <ul class="tracking-widest py-4">
       {venues.map((venue) => (
-        <li>
-          <a href={`/venues/${venue.Slug}`}>{venue.Name}</a>
-          <p>{venue.Location}</p>
+        <li class="py-2 decoration-1">
+		<a class="hover:underline font-medium" href={`/venues/${venue.Slug}`}>{venue.Name}</a>
+		<p>Location: {venue.Location}</p>
         </li>
       ))}
     </ul>

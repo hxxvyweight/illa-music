@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 
 interface Label {
-  ID: int;
+  ID: number;
   Name: string;
   Location: string;
   Slug: string;
@@ -13,13 +13,13 @@ const labels: Label[] = await res.json();
 ---
 
 <Layout title="Labels | Illa-Music">
-  <main class="container">
-    <h1>Artists</h1>
-    <ul>
+  <main class="flex-col items-center text-center justify-center pages">
+    <h1 class="text-xl font-bold">Labels</h1>
+    <ul class="tracking-widest py-4">
       {labels.map((label) => (
-        <li>
-		<a href={`/labels/${label.Slug}`}>{label.Name}</a>
-		<p>Location: ${label.Location}</p>
+        <li class="py-2 decoration-1">
+		<a class="hover:underline"href={`/artists/${label.Slug}`}>{label.Name}</a>
+		<p>Location: {label.Location}</p>
         </li>
       ))}
     </ul>

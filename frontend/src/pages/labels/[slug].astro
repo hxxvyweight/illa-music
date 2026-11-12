@@ -1,24 +1,29 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const res = await fetch("http://localhost:8080/labels");
-  const labels = await res.json();
+  const labels = await getCollection('labels');
 
   return labels.map((label) => ({
-    params: { slug: label.Slug },
+    params: { slug: label.data.slug || label.id },
     props: { label },
   }));
 }
 
 const { label } = Astro.props;
+const { Content } = await render(genre);
 ---
 
-<Layout title={`${label.Name} | Illa-Music`}>
-  <main class="container">
-	  <h1>{label.Name}</h1>
-	  <p>Location: {label.Location}</p>
-    <p>Slug: {label.Slug}</p>
-    <!-- Add any other fields your artist struct has -->
+<Layout title={`${label.data.name} | Illawarra Collections`}>
+  <main class="pages">
+    <h1>{label.data.name}</h1>
+
+    {label.data.category && <p><strong>Category:</strong> {label.data.category}</p>}
+    {label.data.origin && <p><strong>Origin:</strong> {label.data.origin}</p>}
+
+    <article class="content">
+      <Content />
+    </article>
   </main>
 </Layout>
